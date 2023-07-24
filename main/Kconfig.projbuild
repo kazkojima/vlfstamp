@@ -1,0 +1,100 @@
+menu "I2S input Configuration"
+
+config WIFI_SSID
+    string "WIFI access point name (SSID)"
+    default "ssid_of_your_ap"
+    help
+        Enter the name of the WIFI access point
+
+config WIFI_PASSWORD
+    string "WIFI password"
+    default "password_of_your_ap"
+    help
+        Enter ssid password
+
+config UDP_ADDRESS
+    string "IPv4 address of server"
+    default "192.168.11.1"
+    help
+        IP address of the server
+
+config UDP_PORT
+    int "UDP port"
+    default 5990
+    help
+        UDP port used for both Wi-Fi and ether
+
+config TCP_PORT
+    int "TCP port"
+    default 5990
+    help
+        TCP port used for the command server
+
+config I2S_BCK_GPIO
+    int "BCK gpio num"
+    range 1 26
+    default 17
+    help
+        GPIO pin for I2S BCK signal
+
+config I2S_DATAIN_GPIO
+    int "DATA_IN gpio num"
+    range 1 26
+    default 16
+    help
+        GPIO pin for I2S DATA IN signal
+
+config I2S_WS_GPIO
+    int "WS gpio num"
+    range 1 26
+    default 5
+    help
+        GPIO pin for I2S WS signal
+
+config I2S_MCLK_GPIO
+    int "MCLK gpio num"
+    default 1
+    help
+	GPIO pin for I2S MCLK output default 1
+
+config I2S_NUM
+    int "I2S "
+    range 0 1
+    default 0
+    help
+        I2S unit number (default 0)
+
+config I2S_SAMPLE_RATE
+    int "sample rate"
+    default 8000
+    help
+        I2S sample rate (default 8000)
+
+choice I2S_CHANNEL_FORMAT
+    prompt "channel format"
+    default I2S_ONLY_RIGHT
+    help
+        I2S channel formats. Select from STEREO/ONLY_RIGHT/ONLY_LEFT.
+
+config I2S_STEREO
+    bool "LEFT and RIGHT input both"
+config I2S_ONLY_RIGHT
+    bool "RIGHT input only"
+config I2S_ONLY_LEFT
+    bool "LEFT input only"
+endchoice
+
+config I2S_DMA_BUF_NUM
+    int "number of DMA buffer"
+    range 4 16
+    default 8
+    help
+        Specify how many DMA buffers to be used
+
+config I2S_DISPLAY_FFT
+    bool "DISPLAY FFT result"
+    default true
+    help
+	If set, display FFT result
+
+endmenu
