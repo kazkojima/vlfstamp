@@ -25,6 +25,7 @@ Set normal ESP-IDF build environment with
 
 ```
 source ESP_IDF_PATH/export.sh
+idf.py set-target esp32s3
 idf.py menuconfig
 ```
 
