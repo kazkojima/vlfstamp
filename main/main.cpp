@@ -116,19 +116,10 @@ void wifi_init_sta()
 }
 
 extern void setup(void);
-extern void loop(void);
-
-void loop_task(void *)
-{
-  setup();
-  while(true) {
-    loop();
-    vTaskDelay(1 / portTICK_PERIOD_MS);
-  }
-}
 
 extern void control_task(void *);
 extern void udp_task(void *);
+extern void i2s_task(void *);
 
 //extern void udp_task(void *);
 
@@ -143,8 +134,10 @@ extern "C" void app_main(void)
 
   esp_log_level_set("wifi", ESP_LOG_WARN);
 
+  setup();
+
   //xTaskCreatePinnedToCore(loop_task, "loop_task", 8192, NULL, 1, NULL, 1);
-  xTaskCreate(loop_task, "loop_task", 8192, NULL, 1, NULL);
+  xTaskCreate(i2s_task, "i2s_task", 8192, NULL, 1, NULL);
   xTaskCreate(control_task, "control_task", 8192, NULL, 2, NULL);
   xTaskCreate(udp_task, "udp_task", 8192, NULL, 3, NULL);
 

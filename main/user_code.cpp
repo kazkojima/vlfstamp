@@ -127,7 +127,7 @@ uint8_t i2s_readraw_buff[SAMPLE_SIZE*2*4];
 size_t bytes_read;
 
 QueueHandle_t pkt_queue;
-#define PKT_QSIZE 2
+#define PKT_QSIZE 4
 #define PACKET_SIZE sizeof(i2s_readraw_buff)
 
 bool enable_fft = true;
@@ -191,11 +191,7 @@ void setup()
   i2s_chan_config_t chan_cfg = I2S_CHANNEL_DEFAULT_CONFIG(I2S_NUM_AUTO, I2S_ROLE_MASTER);
   i2s_new_channel(&chan_cfg, NULL, &rx_handle);
   i2s_std_config_t std_rx_cfg = {
-    .clk_cfg = {
-      .sample_rate_hz = CONFIG_I2S_SAMPLE_RATE,
-      .clk_src = I2S_CLK_SRC_PLL_160M,
-      .mclk_multiple = I2S_MCLK_MULTIPLE_256,
-    },
+    .clk_cfg = I2S_STD_CLK_DEFAULT_CONFIG(CONFIG_I2S_SAMPLE_RATE),
     .slot_cfg = {
       .data_bit_width = I2S_DATA_BIT_WIDTH_32BIT,
       .slot_bit_width = I2S_SLOT_BIT_WIDTH_32BIT,
@@ -224,22 +220,19 @@ void setup()
 
 }
 
-int count;
-
 int32_t get_s32(uint8_t *p)
 {
   return (int32_t)(p[0] + (p[1] << 8) + (p[2] << 16) + (p[3] << 24));
 }
 
-void loop()
+void i2s_task(void *)
 {
-  
-  i2s_channel_read(rx_handle, i2s_readraw_buff, sizeof(i2s_readraw_buff),
-		   &bytes_read, 1000);
+  while (1) {
+    i2s_channel_read(rx_handle, i2s_readraw_buff, sizeof(i2s_readraw_buff),
+		     &bytes_read, portMAX_DELAY);
 
-  xQueueSend(pkt_queue, (void *)i2s_readraw_buff, (TickType_t)0);
-
-  count++;
+    xQueueSend(pkt_queue, (void *)i2s_readraw_buff, (TickType_t)0);
+  }
 }
 
 // Setup TCP server

@@ -57,22 +57,15 @@ config I2S_MCLK_GPIO
     help
 	GPIO pin for I2S MCLK output default 1
 
-config I2S_NUM
-    int "I2S "
-    range 0 1
-    default 0
-    help
-        I2S unit number (default 0)
-
 config I2S_SAMPLE_RATE
     int "sample rate"
-    default 8000
+    default 96000
     help
-        I2S sample rate (default 8000)
+        I2S sample rate (default 96000)
 
 choice I2S_CHANNEL_FORMAT
     prompt "channel format"
-    default I2S_ONLY_RIGHT
+    default I2S_STEREO
     help
         I2S channel formats. Select from STEREO/ONLY_RIGHT/ONLY_LEFT.
 
@@ -83,18 +76,5 @@ config I2S_ONLY_RIGHT
 config I2S_ONLY_LEFT
     bool "LEFT input only"
 endchoice
-
-config I2S_DMA_BUF_NUM
-    int "number of DMA buffer"
-    range 4 16
-    default 8
-    help
-        Specify how many DMA buffers to be used
-
-config I2S_DISPLAY_FFT
-    bool "DISPLAY FFT result"
-    default true
-    help
-	If set, display FFT result
 
 endmenu
